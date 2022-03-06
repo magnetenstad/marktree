@@ -1,0 +1,23 @@
+{
+  "name": "marktree",
+  "version": "1.0.0",
+  "description": "Grow a markdown tree",
+  "main": "src/index.ts",
+  "scripts": {
+    "start": "node src/index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/magnetenstad/marktree.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/magnetenstad/marktree/issues"
+  },
+  "homepage": "https://github.com/magnetenstad/marktree#readme",
+  "devDependencies": {
+    "typescript": "^4.6.2"
+  }
+}
