@@ -1,3 +1,3 @@
-# marktree
+# marktree 🔖🌳
 
 Grow a markdown tree
