@@ -1,6 +1,6 @@
 # marktree 🔖🌳
 
-Grow a markdown tree
+marktree is a static site generator, using markdown.
 
 ## Get started
 Add marktree to an existing project
