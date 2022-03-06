@@ -1,7 +1,12 @@
 import config from '../marktree.config.js'
 import { File, Directory } from './files.js'
 import MarkdownIt from 'markdown-it'
+import MarkdownKatex from '@iktakahiro/markdown-it-katex'
+import MarkdownHighlight from 'markdown-it-highlightjs'
+
 const md = new MarkdownIt();
+md.use(MarkdownKatex, {"throwOnError" : false, "errorColor" : " #cc0000"});
+md.use(MarkdownHighlight, { inline: true });
 
 export default class MarkTree {
 

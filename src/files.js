@@ -32,6 +32,7 @@ class Directory {
 
   write(path='') {
     path += path === '' ? this.name : '//' + this.name
+    fs.rmdir(path, () => {})
     fs.mkdir(path, () => {})
     this.files.forEach((file) => {
       file.write(path)
