@@ -55,4 +55,20 @@ class Directory {
     })
     return directory
   }
+
+  getFiles(name) {
+    return this.files.filter((file) => file.name.match(name))
+  }
+
+  getFile(name) {
+    const files = this.getFiles(name)
+    return files.length ? files[0] : null
+  }
+
+  removeFile(file) {
+    const index = this.files.indexOf(file)
+    if (index > -1) {
+      this.files.splice(index, 1)
+    }
+  }
 }
