@@ -85,7 +85,7 @@ function link(directory, parentDirectory=null) {
   // Create link to directory index.md
   directory.files.forEach((file) => {
     if (file.name === 'index.md' || !file.name.endsWith('.md')) return
-    file.data = `[${directory.name}](./index.md)\n` + file.data
+    file.data = `↩️ [${directory.name}](./index.md)\n` + file.data
   })
 
   // Get existing index.md
@@ -96,7 +96,7 @@ function link(directory, parentDirectory=null) {
 
   // Create link to parent directory index.md
   if (parentDirectory) {
-    indexMd += `[${parentDirectory.name}](../index.md)\n`
+    indexMd += `↩️ [${parentDirectory.name}](../index.md)\n`
   }
   
   // Create header
@@ -104,9 +104,9 @@ function link(directory, parentDirectory=null) {
 
   // Create links to subdirectories
   if (directory.directories.length) {
-    indexMd += `## Directories\n`
+    indexMd += `### Directories\n`
     directory.directories.forEach((directory) => {
-      indexMd += `[${directory.name}](./${directory.name}/index.md)\n`
+      indexMd += `- [${directory.name}](./${directory.name}/index.md)\n`
     })
   }
 
@@ -116,10 +116,10 @@ function link(directory, parentDirectory=null) {
     directory.files.forEach((file) => {
       if (file.name == config.htmlLayout || file.name == config.cssStyles) return
       if (!count) {
-        indexMd += `## Files\n`
+        indexMd += `### Files\n`
         count++
       }
-      indexMd += `[${file.name}](${file.name})\n`
+      indexMd += `- [${file.name}](${file.name})\n`
     })
   }
 
