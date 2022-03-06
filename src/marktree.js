@@ -1,14 +1,12 @@
-import config from '../marktree.config.js'
 import { File, Directory } from './files.js'
 import MarkdownIt from 'markdown-it'
 import MarkdownKatex from '@iktakahiro/markdown-it-katex'
 import MarkdownHighlight from 'markdown-it-highlightjs'
+import { defaultConfig, defaultHtmlLayout, defaultCssStyles }
+    from './default.js'
 
-const defaultHtmlLayout =
-    File.read(`default/${config.htmlLayout}`, config.htmlLayout)
-const defaultCssStyles = 
-    File.read(`default/${config.cssStyles}`, config.cssStyles)
-
+const config = defaultConfig
+Object.assign(config, JSON.parse(File.read('marktree.config.json').data))
 const md = new MarkdownIt();
 md.use(MarkdownKatex, {"throwOnError" : false, "errorColor" : " #cc0000"});
 md.use(MarkdownHighlight, { inline: true });
@@ -20,8 +18,8 @@ export default class MarkTree {
     console.log('[Read] ' + this.markdown.toString());
     this.markdown.name = config.dest
     link(this.markdown)
-    this.markdown.files.push(defaultHtmlLayout)
-    this.markdown.files.push(defaultCssStyles)
+    this.markdown.files.push(new File(config.htmlLayout, defaultHtmlLayout))
+    this.markdown.files.push(new File(config.cssStyles, defaultCssStyles))
   }
 
   writeMarkdown() {
