@@ -13,8 +13,8 @@ class File {
     fs.writeFileSync(path, this.data)
   }
 
-  static read(name) {
-    const data = fs.readFileSync(name, 'utf8')
+  static read(path, name=path) {
+    const data = fs.readFileSync(path, 'utf8')
     return new File(name, data)
   }
 
