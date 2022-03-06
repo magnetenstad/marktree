@@ -46,7 +46,7 @@ function makeHtmlDirectory(mdDirectory, htmlLayout=null, cssStyles=[]) {
   }
   const newStyles = mdDirectory.getFile(config.cssStyles)
   if (newStyles) {
-    cssStyles.push(newStyles)
+    cssStyles = [...cssStyles, newStyles]
   } 
 
   // Copy files to new directory
