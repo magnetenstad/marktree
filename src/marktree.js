@@ -1,21 +1,47 @@
 import config from '../marktree.config.js'
 import { File, Directory } from './files.js'
+import MarkdownIt from 'markdown-it'
+const md = new MarkdownIt();
+const htmlBase = File.read(config.htmlBase).data
 
 export default class MarkTree {
 
   constructor() {
-    this.root = Directory.read(config.source);
-    this.root.name = config.dest
-    link(this.root)
+    this.markdown = Directory.read(config.source);
+    this.markdown.name = config.dest
+    link(this.markdown)
   }
 
-  build() {
-    this.root.write()
+  writeMarkdown() {
+    this.markdown.write()
+  }
+
+  writeHtml() {
+    writeHtml(this.markdown)
   }
 
   config() {
     return config
   }
+}
+
+function writeHtml(directory) {
+  const htmlDirectory = makeHtmlDirectory(directory)
+  htmlDirectory.write();
+}
+
+function makeHtmlDirectory(mdDirectory) {
+  const htmlDirectory = new Directory(mdDirectory.name)
+  mdDirectory.files.forEach((mdFile) => {
+    const htmlRender = md.render(mdFile.data.replaceAll('.md)', '.html)'))
+    const htmlData = htmlBase.replaceAll(config.htmlReplace, htmlRender)
+    const htmlFile = new File(mdFile.name.replaceAll('.md', '.html'), htmlData)
+    htmlDirectory.files.push(htmlFile)
+  })
+  mdDirectory.directories.forEach((mdSubDir) => {
+    htmlDirectory.directories.push(makeHtmlDirectory(mdSubDir))
+  })
+  return htmlDirectory
 }
 
 function link(directory, parentDirectory=null) {

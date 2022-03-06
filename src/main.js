@@ -1,4 +1,5 @@
 import MarkTree from './markTree.js'
 
 const mt = new MarkTree()
-mt.build()
+mt.writeMarkdown()
+mt.writeHtml()
