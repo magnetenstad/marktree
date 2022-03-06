@@ -7,7 +7,7 @@ export default class MarkTree {
 
   constructor() {
     this.markdown = Directory.read(config.source);
-    console.log(this.markdown.toString());
+    console.log('[Read] ' + this.markdown.toString());
     this.markdown.name = config.dest
     link(this.markdown)
   }
@@ -17,23 +17,14 @@ export default class MarkTree {
   }
 
   writeHtml() {
-    writeHtml(this.markdown)
+    const htmlDirectory = makeHtmlDirectory(this.markdown)
+    console.log('[Write] ' + htmlDirectory.toString());
+    htmlDirectory.write();
   }
 
   config() {
     return config
   }
-}
-
-
-/**
- * 
- * @param {Directory} directory 
- */
-function writeHtml(directory) {
-  const htmlDirectory = makeHtmlDirectory(directory)
-  console.log(htmlDirectory.toString());
-  htmlDirectory.write();
 }
 
 

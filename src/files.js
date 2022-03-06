@@ -10,7 +10,6 @@ class File {
 
   write(path='') {
     path += path === '' ? this.name : '//' + this.name
-    console.log(`Write ${path}`)
     fs.writeFileSync(path, this.data)
   }
 
