@@ -35,7 +35,7 @@ export default class MarkTree {
  * @param {*} cssStyles 
  * @returns 
  */
-function makeHtmlDirectory(mdDirectory, htmlLayout=null, cssStyles=null) {
+function makeHtmlDirectory(mdDirectory, htmlLayout=null, cssStyles=[]) {
   // Create a new directory
   const htmlDirectory = new Directory(mdDirectory.name)
 
@@ -46,7 +46,7 @@ function makeHtmlDirectory(mdDirectory, htmlLayout=null, cssStyles=null) {
   }
   const newStyles = mdDirectory.getFile(config.cssStyles)
   if (newStyles) {
-    cssStyles = newStyles
+    cssStyles.push(newStyles)
   } 
 
   // Copy files to new directory
@@ -55,7 +55,10 @@ function makeHtmlDirectory(mdDirectory, htmlLayout=null, cssStyles=null) {
     if (file.name.endsWith('.md')) {
       // Markdown files are converted to html
       const htmlRender = md.render(file.data.replaceAll('.md)', '.html)'))
-      const htmlStyles = `<link rel="stylesheet" href="${cssStyles}">`
+      let htmlStyles = ''
+      cssStyles.forEach((style) => {
+        htmlStyles += `<link rel="stylesheet" href="${style}">\n`
+      })
       const htmlData = htmlLayout
           .replaceAll(config.insertMarkdown, htmlRender)
           .replaceAll(config.insertStyles, htmlStyles)
@@ -67,9 +70,13 @@ function makeHtmlDirectory(mdDirectory, htmlLayout=null, cssStyles=null) {
   })
 
   // Recursively create html subdirectories
+  const subDirectoryStyles = []
+  cssStyles.forEach((style) => {
+    subDirectoryStyles.push('../' + style)
+  })
   mdDirectory.directories.forEach((mdSubDir) => {
     htmlDirectory.directories.push(
-        makeHtmlDirectory(mdSubDir, htmlLayout, '../' + cssStyles))
+        makeHtmlDirectory(mdSubDir, htmlLayout, subDirectoryStyles))
   })
 
   return htmlDirectory
