@@ -18,6 +18,10 @@ class File {
     const data = fs.readFileSync(name, 'utf8')
     return new File(name, data)
   }
+
+  toString() {
+    return `${this.name}`
+  }
 }
 
 class Directory {
@@ -70,5 +74,17 @@ class Directory {
     if (index > -1) {
       this.files.splice(index, 1)
     }
+  }
+  
+  toString() {
+    let string = `${this.name} {`
+    this.files.forEach((file) => {
+      string += `\n${file.toString()}`
+    })
+    this.directories.forEach((directory) => {
+      string += `\n${directory.toString()}`
+    })
+    string = string.replaceAll('\n', '\n\t')
+    return `${string}\n}`
   }
 }
