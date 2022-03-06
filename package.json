@@ -1,6 +1,6 @@
 {
-  "name": "@magnetenstad/marktree",
-  "version": "1.0.0",
+  "name": "marktree",
+  "version": "0.0.1",
   "description": "Grow a markdown tree",
   "main": "src/main.js",
   "type": "module",
@@ -20,6 +20,7 @@
   "homepage": "https://github.com/magnetenstad/marktree#readme",
   "dependencies": {
     "@iktakahiro/markdown-it-katex": "^4.0.1",
+    "find-config": "^1.0.0",
     "markdown-it": "^12.3.2",
     "markdown-it-highlightjs": "^3.6.0"
   }
