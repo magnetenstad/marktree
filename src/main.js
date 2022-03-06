@@ -1,5 +1,4 @@
-import MarkTree from './marktree.js'
+import MarkTree from './markTree.js'
 
 const mt = new MarkTree()
-
-console.log(JSON.stringify(mt.config()));
+mt.build()
