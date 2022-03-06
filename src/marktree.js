@@ -4,6 +4,8 @@ import MarkdownIt from 'markdown-it'
 import MarkdownKatex from '@iktakahiro/markdown-it-katex'
 import MarkdownHighlight from 'markdown-it-highlightjs'
 
+const defaultHtmlLayout = File.read(`default/${config.htmlLayout}`).data
+const defaultCssStyles = File.read(`default/${config.cssStyles}`).data
 const md = new MarkdownIt();
 md.use(MarkdownKatex, {"throwOnError" : false, "errorColor" : " #cc0000"});
 md.use(MarkdownHighlight, { inline: true });
@@ -40,7 +42,8 @@ export default class MarkTree {
  * @param {*} cssStyles 
  * @returns 
  */
-function makeHtmlDirectory(mdDirectory, htmlLayout=null, cssStyles=[]) {
+function makeHtmlDirectory(mdDirectory,
+    htmlLayout=defaultHtmlLayout, cssStyles=[defaultCssStyles]) {
   // Create a new directory
   const htmlDirectory = new Directory(mdDirectory.name)
 
