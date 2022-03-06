@@ -1,7 +1,7 @@
 
 export default {
-  source: './markdown',
-  dest: './marktree',
-  htmlBase: './base.html',
+  source: 'example',
+  dest: 'docs',
+  htmlBase: 'base.html',
   htmlReplace: '<!-- marktree -->'
 }
