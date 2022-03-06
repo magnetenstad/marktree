@@ -14,8 +14,13 @@ class File {
   }
 
   static read(path, name=path) {
-    const data = fs.readFileSync(path, 'utf8')
-    return new File(name, data)
+    if (fs.existsSync(path)) {
+      const data = fs.readFileSync(path, 'utf8')
+      return new File(name, data)
+    } else {
+      console.warn(`[WARNING] Could not read file ${name}`)
+      return null
+    }
   }
 
   toString() {

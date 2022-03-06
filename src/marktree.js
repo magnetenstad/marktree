@@ -6,7 +6,10 @@ import { defaultConfig, defaultHtmlLayout, defaultCssStyles }
     from './default.js'
 
 const config = defaultConfig
-Object.assign(config, JSON.parse(File.read('marktree.config.json').data))
+const configFile = File.read('marktree.config.json')
+if (configFile) {
+  Object.assign(config, JSON.parse(configFile.data))
+}
 const md = new MarkdownIt();
 md.use(MarkdownKatex, {"throwOnError" : false, "errorColor" : " #cc0000"});
 md.use(MarkdownHighlight, { inline: true });
