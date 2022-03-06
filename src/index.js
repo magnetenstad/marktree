@@ -1,3 +1,3 @@
-import MarkTree from './marktree.js'
+import { readMarkdown, writeHtml } from './marktree.js'
 
-export default MarkTree
+export { readMarkdown, writeHtml }

@@ -1,9 +1,12 @@
 {
   "name": "marktree",
-  "version": "0.0.7",
+  "version": "0.0.10",
   "description": "Grow a markdown tree",
   "main": "src/index.js",
   "type": "module",
+  "bin": {
+    "marktree": "bin/marktree.js"
+  },
   "scripts": {
     "test": "node src/test.js"
   },
@@ -20,8 +23,10 @@
   "homepage": "https://github.com/magnetenstad/marktree#readme",
   "dependencies": {
     "@iktakahiro/markdown-it-katex": "^4.0.1",
+    "esm": "^3.2.25",
     "find-config": "^1.0.0",
     "markdown-it": "^12.3.2",
-    "markdown-it-highlightjs": "^3.6.0"
+    "markdown-it-highlightjs": "^3.6.0",
+    "virtual-file-system": "^1.0.0"
   }
 }

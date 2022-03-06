@@ -1,4 +1,4 @@
-import { File, Directory } from './files.js'
+import { File, Directory } from 'virtual-file-system'
 import MarkdownIt from 'markdown-it'
 import MarkdownKatex from '@iktakahiro/markdown-it-katex'
 import MarkdownHighlight from 'markdown-it-highlightjs'
