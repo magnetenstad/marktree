@@ -29,10 +29,7 @@ class Directory {
 
   write(path='') {
     path += path === '' ? this.name : '//' + this.name
-    console.log(path);
     fs.mkdir(path, () => {})
-    console.log(this.files);
-    console.log(this.directories);
     this.files.forEach((file) => {
       file.write(path)
     })
