@@ -5,6 +5,8 @@ import MarkdownHighlight from 'markdown-it-highlightjs'
 import { defaultConfig, defaultHtmlLayout, defaultCssStyles }
     from './default.js'
 
+export { readMarkdown, writeHtml }
+
 const config = defaultConfig
 const configFile = File.read('marktree.config.json')
 if (configFile) {
@@ -14,32 +16,21 @@ const md = new MarkdownIt();
 md.use(MarkdownKatex, {"throwOnError" : false, "errorColor" : " #cc0000"});
 md.use(MarkdownHighlight, { inline: true });
 
-export default class MarkTree {
-
-  constructor() {
-    this.markdown = Directory.read(config.source);
-    console.log('[Read] ' + this.markdown.toString());
-    this.markdown.name = config.dest
-    link(this.markdown)
-    this.markdown.files.push(new File(config.htmlLayout, defaultHtmlLayout))
-    this.markdown.files.push(new File(config.cssStyles, defaultCssStyles))
-  }
-
-  writeMarkdown() {
-    this.markdown.write()
-  }
-
-  writeHtml() {
-    const htmlDirectory = makeHtmlDirectory(this.markdown)
-    console.log('[Write] ' + htmlDirectory.toString());
-    htmlDirectory.write();
-  }
-
-  config() {
-    return config
-  }
+function readMarkdown(source=config.source) {
+  const mdDirectory = Directory.read(source);
+  console.log('[Read] ' + mdDirectory.toString());
+  mdDirectory.files.push(new File(config.htmlLayout, defaultHtmlLayout))
+  mdDirectory.files.push(new File(config.cssStyles, defaultCssStyles))
+  link(mdDirectory)
+  return mdDirectory
 }
 
+function writeHtml(mdDirectory, dest=config.dest) {
+  const htmlDirectory = makeHtmlDirectory(mdDirectory)
+  htmlDirectory.name = dest
+  console.log('[Write] ' + htmlDirectory.toString());
+  htmlDirectory.write();
+}
 
 /**
  * 

@@ -1,6 +1,6 @@
 {
   "name": "marktree",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Grow a markdown tree",
   "main": "src/index.js",
   "type": "module",

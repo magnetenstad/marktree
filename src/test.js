@@ -1,4 +1,3 @@
-import MarkTree from './marktree.js'
+import { readMarkdown, writeHtml } from './marktree.js'
 
-const mt = new MarkTree()
-mt.writeHtml()
+writeHtml(readMarkdown())
