@@ -1,10 +1,11 @@
 # marktree 🔖🌳
 
-marktree is a static site generator, using markdown.
+marktree is a static site generator, using markdown. It works with GitHub pages out of the box.
 
 ## Get started
-Add marktree to an existing project
+Initialize a new marktree project with [create-marktree](https://github.com/magnetenstad/create-marktree)
+or add marktree to an existing project
 ```sh
 npm i marktree
 ```
-Or initialize a new project with [create-marktree](https://github.com/magnetenstad/create-marktree)
+
