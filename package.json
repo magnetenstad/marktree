@@ -1,6 +1,6 @@
 {
   "name": "marktree",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "Grow a markdown tree",
   "main": "src/index.js",
   "type": "module",
@@ -27,6 +27,6 @@
     "find-config": "^1.0.0",
     "markdown-it": "^12.3.2",
     "markdown-it-highlightjs": "^3.6.0",
-    "virtual-file-system": "^1.0.3"
+    "virtual-file-system": "^1.0.5"
   }
 }
