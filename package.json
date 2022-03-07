@@ -1,6 +1,6 @@
 {
   "name": "marktree",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "description": "Grow a markdown tree",
   "main": "src/index.js",
   "type": "module",
@@ -24,7 +24,6 @@
   "dependencies": {
     "@iktakahiro/markdown-it-katex": "^4.0.1",
     "esm": "^3.2.25",
-    "find-config": "^1.0.0",
     "markdown-it": "^12.3.2",
     "markdown-it-highlightjs": "^3.6.0",
     "virtual-file-system": "^1.0.10"
