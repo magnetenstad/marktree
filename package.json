@@ -8,7 +8,7 @@
     "marktree": "bin/marktree.js"
   },
   "scripts": {
-    "test": "node src/test.js"
+    "build": "marktree"
   },
   "repository": {
     "type": "git",
