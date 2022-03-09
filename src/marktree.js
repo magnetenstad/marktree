@@ -5,7 +5,7 @@ import MarkdownHighlight from 'markdown-it-highlightjs'
 import { defaultConfig, defaultHtmlLayout, defaultCssStyles }
     from './default.js'
 
-export { readMarkdown, writeHtml }
+export { buildMarktree }
 
 const config = defaultConfig
 const configFile = File.read('marktree.config.json')
@@ -16,20 +16,26 @@ const md = new MarkdownIt();
 md.use(MarkdownKatex, {"throwOnError" : false, "errorColor" : " #cc0000"});
 md.use(MarkdownHighlight, { inline: true });
 
-function readMarkdown(source=config.source) {
-  const mdDirectory = Directory.read(source);
+function buildMarktree() {
+  const mdDirectory = Directory.read(config.source);
   console.log('[Read] ' + mdDirectory.toString());
-  mdDirectory.files.push(new File(config.htmlLayout, defaultHtmlLayout))
-  mdDirectory.files.push(new File(config.cssStyles, defaultCssStyles))
-  link(mdDirectory)
-  return mdDirectory
+
+  editMarkdown(mdDirectory)
+  const htmlDirectory = buildHtml(mdDirectory)
+  htmlDirectory.name = config.dest
+  
+  console.log('[Write] ' + htmlDirectory.toString());
+  htmlDirectory.write()
 }
 
-function writeHtml(mdDirectory, dest=config.dest) {
-  const htmlDirectory = makeHtmlDirectory(mdDirectory)
-  htmlDirectory.name = dest
-  console.log('[Write] ' + htmlDirectory.toString());
-  htmlDirectory.write();
+function editMarkdown(directory) {
+  if (!directory.getFile(config.htmlLayout)) {
+    directory.files.push(new File(config.htmlLayout, defaultHtmlLayout))
+  }
+  if (!directory.getFile(config.cssStyles)) {
+    directory.files.push(new File(config.cssStyles, defaultCssStyles))
+  }
+  linkMarkdown(directory)
 }
 
 /**
@@ -39,7 +45,7 @@ function writeHtml(mdDirectory, dest=config.dest) {
  * @param {*} cssStyles 
  * @returns 
  */
-function makeHtmlDirectory(mdDirectory, htmlLayout=null, cssStyles=[]) {
+function buildHtml(mdDirectory, htmlLayout=null, cssStyles=[]) {
   // Create a new directory
   const htmlDirectory = new Directory(mdDirectory.name)
 
@@ -80,7 +86,7 @@ function makeHtmlDirectory(mdDirectory, htmlLayout=null, cssStyles=[]) {
   })
   mdDirectory.directories.forEach((mdSubDir) => {
     htmlDirectory.directories.push(
-        makeHtmlDirectory(mdSubDir, htmlLayout, subDirectoryStyles))
+        buildHtml(mdSubDir, htmlLayout, subDirectoryStyles))
   })
 
   return htmlDirectory
@@ -92,7 +98,7 @@ function makeHtmlDirectory(mdDirectory, htmlLayout=null, cssStyles=[]) {
  * @param {Directory} directory 
  * @param {Directory} parentDirectory 
  */
-function link(directory, parentDirectory=null) {
+function linkMarkdown(directory, parentDirectory=null) {
   // Create link to directory index.md
   directory.files.forEach((file) => {
     if (file.name === 'index.md' || !file.name.endsWith('.md')) return
@@ -139,6 +145,6 @@ function link(directory, parentDirectory=null) {
   
   // Recursively link subdirectories
   directory.directories.forEach((subDirectory) => {
-    link(subDirectory, directory)
+    linkMarkdown(subDirectory, directory)
   })
 }

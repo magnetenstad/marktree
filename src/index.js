@@ -1,3 +1,3 @@
-import { readMarkdown, writeHtml } from './marktree.js'
+import { buildMarktree } from './marktree.js'
 
-export { readMarkdown, writeHtml }
+export { buildMarktree }
