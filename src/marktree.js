@@ -78,7 +78,6 @@ function buildHtml(mdDirectory, htmlLayout=null, cssStyles=[], icon=null) {
       cssStyles.forEach((style) => {
         htmlStyles += `<link rel="stylesheet" href="${style}">\n`
       })
-      console.log(file.metadata)
       // Inserts
       const htmlData = htmlLayout
           .replaceAll(config.insertMarkdown, htmlRender)
