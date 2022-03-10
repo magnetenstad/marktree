@@ -8,6 +8,7 @@
     "marktree": "bin/marktree.js"
   },
   "scripts": {
+    "dev": "nodemon marktree",
     "build": "marktree"
   },
   "repository": {
@@ -26,6 +27,10 @@
     "esm": "^3.2.25",
     "markdown-it": "^12.3.2",
     "markdown-it-highlightjs": "^3.6.0",
-    "virtual-file-system": "^1.1.0"
+    "markdown-yaml-metadata-parser": "^3.0.0",
+    "virtual-file-system": "^1.1.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
   }
 }

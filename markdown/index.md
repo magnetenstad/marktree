@@ -1,3 +1,6 @@
+---
+title: Welcome to marktree!
+---
 
 # Welcome to marktree!
 marktree is a static site generator, using markdown. It works great with GitHub pages. Thank you for giving it a try!

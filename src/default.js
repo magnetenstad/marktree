@@ -1,11 +1,15 @@
 
 export const defaultConfig = {
+  "title": "untitled",
   "source": "markdown",
   "dest": "docs",
   "htmlLayout": "layout.html",
+  "cssStyles": "styles.css",
+  "icon": "favicon.ico",
   "insertMarkdown": "<!-- insert:markdown -->",
   "insertStyles": "<!-- insert:styles -->",
-  "cssStyles": "styles.css"
+  "insertTitle": "<!-- insert:title -->",
+  "insertIcon": "<!-- insert:icon -->",
 }
 
 export const defaultHtmlLayout = `
@@ -15,16 +19,20 @@ export const defaultHtmlLayout = `
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+  
   <!-- Katex -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+  <link rel="stylesheet" href=
+      "https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
   <!-- GitHub Markdown Styles -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/github-markdown-css/2.2.1/github-markdown.css"/>
-
+  <link rel="stylesheet" href=
+      "https://cdn.jsdelivr.net/github-markdown-css/2.2.1/github-markdown.css"/>
+  
+  <title><!-- insert:title --></title>
+  <link rel="icon" type="image/x-icon" href="<!-- insert:icon -->">
+  
 <!-- Custom Styles -->
 <!-- insert:styles -->
 
-  <title>Document</title>
 </head>
 <body>
 <article class="markdown-body">
