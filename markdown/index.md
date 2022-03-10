@@ -123,3 +123,11 @@ Enabled by [@iktakahiro/markdown-it-katex](https://www.npmjs.com/package/@iktaka
 ### Images
 Here's a gull
 ![](images/gull.jpg)
+
+### Includes
+Include other files with #include() on a new line
+
+Example (#include(markdown/fragment.md)): 
+
+#include(markdown/fragment.md)
+[](markdown/fragment.md)

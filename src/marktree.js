@@ -2,6 +2,7 @@ import { File, Directory } from 'virtual-file-system'
 import MarkdownIt from 'markdown-it'
 import MarkdownKatex from '@iktakahiro/markdown-it-katex'
 import MarkdownHighlight from 'markdown-it-highlightjs'
+import MarkdownInclude from 'markdown-it-include'
 import { defaultConfig, defaultHtmlLayout, defaultCssStyles }
     from './defaults.js'
 import metadataParser from 'markdown-yaml-metadata-parser'
@@ -14,7 +15,9 @@ if (configFile) {
   Object.assign(config, JSON.parse(configFile.data))
 }
 const md = new MarkdownIt();
-md.use(MarkdownKatex, {"throwOnError" : false, "errorColor" : " #cc0000"});
+md.use(MarkdownInclude,
+    { includeRe: /\n#include(.+)/, bracesAreOptional: true })
+md.use(MarkdownKatex, { "throwOnError" : false, "errorColor" : " #cc0000" });
 md.use(MarkdownHighlight, { inline: true });
 
 function buildMarktree() {
@@ -72,8 +75,7 @@ function buildHtml(mdDirectory, htmlLayout=null, cssStyles=[], icon=null) {
     if (file.name.endsWith('.html')) return
     // Markdown files are converted to html
     if (file.name.endsWith('.md')) {
-      const data = file.data.replaceAll('.md)', '.html)')
-      const htmlRender = md.render(data)
+      const htmlRender = md.render(file.data).replaceAll('.md', '.html')
       let htmlStyles = ''
       cssStyles.forEach((style) => {
         htmlStyles += `<link rel="stylesheet" href="${style}">\n`
