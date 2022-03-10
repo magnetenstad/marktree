@@ -8,8 +8,8 @@
     "marktree": "bin/marktree.js"
   },
   "scripts": {
-    "dev": "nodemon marktree",
-    "build": "marktree"
+    "dev": "nodemon src/index.js",
+    "build": "node src/index.js"
   },
   "repository": {
     "type": "git",
