@@ -47,11 +47,12 @@ npm i nodemon -D
 npm run dev
 ```
 
-## Configure marktree
+## Configuration
+
+### Configure marktree
 Configure marktree by adding a `marktree.config.json` config file. The following are default values.
 ```json
 {
-  "title": "untitled",
   "source": "markdown",
   "dest": "docs",
   "htmlLayout": "layout.html",
@@ -64,8 +65,16 @@ Configure marktree by adding a `marktree.config.json` config file. The following
 }
 ```
 
-## Styling
+### Styling
 Add a `styles.css` file to the directory you want to be styled. Styles are also applied all subdirectories.
 
-## Icon
+### Icon
 Add a `favicon.ico` file to the directory you want to include the icon. The icon is also applied to all subdirectories.
+
+### YAML
+Add file metadata with YAML. THe following attributes are supported
+```yaml
+---
+title:
+---
+```

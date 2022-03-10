@@ -1,6 +1,5 @@
 
 export const defaultConfig = {
-  "title": "untitled",
   "source": "markdown",
   "dest": "docs",
   "htmlLayout": "layout.html",

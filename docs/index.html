@@ -88,10 +88,10 @@
 </ol>
 <pre><code class="hljs language-sh">npm run dev
 </code></pre>
-<h2>Configure marktree</h2>
+<h2>Configuration</h2>
+<h3>Configure marktree</h3>
 <p>Configure marktree by adding a <code>marktree.config.json</code> config file. The following are default values.</p>
 <pre><code class="hljs language-json"><span class="hljs-punctuation">{</span>
-  <span class="hljs-attr">&quot;title&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;untitled&quot;</span><span class="hljs-punctuation">,</span>
   <span class="hljs-attr">&quot;source&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;markdown&quot;</span><span class="hljs-punctuation">,</span>
   <span class="hljs-attr">&quot;dest&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;docs&quot;</span><span class="hljs-punctuation">,</span>
   <span class="hljs-attr">&quot;htmlLayout&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;layout.html&quot;</span><span class="hljs-punctuation">,</span>
@@ -103,10 +103,16 @@
   <span class="hljs-attr">&quot;insertIcon&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;&lt;!-- insert:icon --&gt;&quot;</span><span class="hljs-punctuation">,</span>
 <span class="hljs-punctuation">}</span>
 </code></pre>
-<h2>Styling</h2>
+<h3>Styling</h3>
 <p>Add a <code>styles.css</code> file to the directory you want to be styled. Styles are also applied all subdirectories.</p>
-<h2>Icon</h2>
+<h3>Icon</h3>
 <p>Add a <code>favicon.ico</code> file to the directory you want to include the icon. The icon is also applied to all subdirectories.</p>
+<h3>YAML</h3>
+<p>Add file metadata with YAML. THe following attributes are supported</p>
+<pre><code class="hljs language-yaml"><span class="hljs-meta">---</span>
+<span class="hljs-attr">title:</span>
+<span class="hljs-meta">---
+</span></code></pre>
 <h2>Functionality</h2>
 <h3>Connections</h3>
 <p>The links to <strong>Files</strong> and <strong>Directories</strong> above are automatically generated! (if you are viewing this as html)</p>

@@ -83,7 +83,7 @@ function buildHtml(mdDirectory, htmlLayout=null, cssStyles=[], icon=null) {
           .replaceAll(config.insertMarkdown, htmlRender)
           .replaceAll(config.insertStyles, htmlStyles)
           .replaceAll(config.insertTitle, 
-              file.metadata.title ? file.metadata.title : config.title)
+              file.metadata.title ? file.metadata.title : file.name)
           .replaceAll(config.insertIcon, icon)
       const htmlFile = new File(file.name.replaceAll('.md', '.html'), htmlData)
       htmlFile.metadata = file.metadata
@@ -160,6 +160,7 @@ function linkMarkdown(directory, parentDirectory=null) {
     indexFile.data = indexMd + indexData
   } else {
     indexFile = new File('index.md', indexMd + indexData)
+    indexFile.metadata = {title: directory.name}
   }
   directory.files.push(indexFile)
   
