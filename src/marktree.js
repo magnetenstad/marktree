@@ -3,7 +3,7 @@ import MarkdownIt from 'markdown-it'
 import MarkdownKatex from '@iktakahiro/markdown-it-katex'
 import MarkdownHighlight from 'markdown-it-highlightjs'
 import { defaultConfig, defaultHtmlLayout, defaultCssStyles }
-    from './default.js'
+    from './defaults.js'
 import metadataParser from 'markdown-yaml-metadata-parser'
 
 export { buildMarktree }
