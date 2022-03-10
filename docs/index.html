@@ -68,9 +68,10 @@
 <pre><code class="hljs"><span class="hljs-built_in">npm</span> i nodemon -D
 </code></pre>
 <ol start="2">
-<li>Add the dev script to <code><span class="hljs-keyword">package</span>.json</code></li>
+<li>Add the dev script to <code><span class="hljs-keyword">package</span>.json</code> and update <code><span class="hljs-selector-tag">main</span></code></li>
 </ol>
-<pre><code class="hljs language-diff">&quot;scripts&quot;: {
+<pre><code class="hljs language-diff"><span class="hljs-addition">+&quot;main&quot;: &quot;node_modules/marktree/src/index.js&quot;,</span>
+&quot;scripts&quot;: {
 <span class="hljs-addition">+  &quot;dev&quot;: &quot;nodemon marktree&quot;,</span>
    &quot;build&quot;: &quot;marktree&quot;
 },

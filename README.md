@@ -28,8 +28,9 @@ npm run build
 ```
 npm i nodemon -D
 ```
-2. Add the dev script to `package.json`
+2. Add the dev script to `package.json` and update `main`
 ```diff
++"main": "node_modules/marktree/src/index.js",
 "scripts": {
 +  "dev": "nodemon marktree",
    "build": "marktree"
