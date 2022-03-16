@@ -17,7 +17,7 @@ md.use(MarkdownKatex, {"throwOnError" : false, "errorColor" : " #cc0000"});
 md.use(MarkdownHighlight, { inline: true });
 
 function readMarkdown(source=config.source) {
-  const mdDirectory = Directory.read(source);
+  const mdDirectory = Directory.read(source, config.exclude);
   console.log('[Read] ' + mdDirectory.toString());
   mdDirectory.files.push(new File(config.htmlLayout, defaultHtmlLayout))
   mdDirectory.files.push(new File(config.cssStyles, defaultCssStyles))
