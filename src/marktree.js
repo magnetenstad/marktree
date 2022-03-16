@@ -2,10 +2,12 @@ import { File, Directory } from 'virtual-file-system'
 import MarkdownIt from 'markdown-it'
 import MarkdownKatex from '@iktakahiro/markdown-it-katex'
 import MarkdownHighlight from 'markdown-it-highlightjs'
+import MarkdownInclude from 'markdown-it-include'
 import { defaultConfig, defaultHtmlLayout, defaultCssStyles }
-    from './default.js'
+    from './defaults.js'
+import metadataParser from 'markdown-yaml-metadata-parser'
 
-export { readMarkdown, writeHtml }
+export { buildMarktree }
 
 const config = defaultConfig
 const configFile = File.read('marktree.config.json')
@@ -13,23 +15,34 @@ if (configFile) {
   Object.assign(config, JSON.parse(configFile.data))
 }
 const md = new MarkdownIt();
-md.use(MarkdownKatex, {"throwOnError" : false, "errorColor" : " #cc0000"});
+md.use(MarkdownInclude,
+    { includeRe: /\n#include(.+)/, bracesAreOptional: true })
+md.use(MarkdownKatex, { "throwOnError" : false, "errorColor" : " #cc0000" });
 md.use(MarkdownHighlight, { inline: true });
 
-function readMarkdown(source=config.source) {
-  const mdDirectory = Directory.read(source, config.exclude);
+function buildMarktree() {
+  console.log('Starting build...')
+  const mdDirectory = Directory.read(config.source, config.exclude);
   console.log('[Read] ' + mdDirectory.toString());
-  mdDirectory.files.push(new File(config.htmlLayout, defaultHtmlLayout))
-  mdDirectory.files.push(new File(config.cssStyles, defaultCssStyles))
-  link(mdDirectory)
-  return mdDirectory
+  editMarkdown(mdDirectory)
+  console.log('Edited markdown')
+  const htmlDirectory = buildHtml(mdDirectory)
+  htmlDirectory.name = config.dest
+  console.log('Rendered html')
+  htmlDirectory.write()
+  console.log('[Write] ' + htmlDirectory.toString());
+  console.log('Successfully finished building!');
 }
 
-function writeHtml(mdDirectory, dest=config.dest) {
-  const htmlDirectory = makeHtmlDirectory(mdDirectory)
-  htmlDirectory.name = dest
-  console.log('[Write] ' + htmlDirectory.toString());
-  htmlDirectory.write();
+function editMarkdown(directory) {
+  if (!directory.getFile(config.htmlLayout)) {
+    directory.files.push(new File(config.htmlLayout, defaultHtmlLayout))
+  }
+  if (!directory.getFile(config.cssStyles)) {
+    directory.files.push(new File(config.cssStyles, defaultCssStyles))
+  }
+  readMetadata(directory)
+  linkMarkdown(directory)
 }
 
 /**
@@ -39,7 +52,7 @@ function writeHtml(mdDirectory, dest=config.dest) {
  * @param {*} cssStyles 
  * @returns 
  */
-function makeHtmlDirectory(mdDirectory, htmlLayout=null, cssStyles=[]) {
+function buildHtml(mdDirectory, htmlLayout=null, cssStyles=[], icon=null) {
   // Create a new directory
   const htmlDirectory = new Directory(mdDirectory.name)
 
@@ -51,22 +64,31 @@ function makeHtmlDirectory(mdDirectory, htmlLayout=null, cssStyles=[]) {
   const newStyles = mdDirectory.getFile(config.cssStyles)
   if (newStyles) {
     cssStyles = [...cssStyles, newStyles]
-  } 
+  }
+  const newIcon = mdDirectory.getFile(config.icon)
+  if (newIcon) {
+    icon = newIcon.name
+  }
 
   // Copy files to new directory
   mdDirectory.files.forEach((file) => {
     if (file.name.endsWith('.html')) return
+    // Markdown files are converted to html
     if (file.name.endsWith('.md')) {
-      // Markdown files are converted to html
-      const htmlRender = md.render(file.data.replaceAll('.md)', '.html)'))
+      const htmlRender = md.render(file.data).replaceAll('.md', '.html')
       let htmlStyles = ''
       cssStyles.forEach((style) => {
         htmlStyles += `<link rel="stylesheet" href="${style}">\n`
       })
+      // Inserts
       const htmlData = htmlLayout
           .replaceAll(config.insertMarkdown, htmlRender)
           .replaceAll(config.insertStyles, htmlStyles)
+          .replaceAll(config.insertTitle, 
+              file.metadata.title ? file.metadata.title : file.name)
+          .replaceAll(config.insertIcon, icon)
       const htmlFile = new File(file.name.replaceAll('.md', '.html'), htmlData)
+      htmlFile.metadata = file.metadata
       htmlDirectory.files.push(htmlFile)
     } else {
       htmlDirectory.files.push(new File(file.name, file.data))
@@ -78,9 +100,10 @@ function makeHtmlDirectory(mdDirectory, htmlLayout=null, cssStyles=[]) {
   cssStyles.forEach((style) => {
     subDirectoryStyles.push('../' + style)
   })
+  icon = '../' + icon
   mdDirectory.directories.forEach((mdSubDir) => {
     htmlDirectory.directories.push(
-        makeHtmlDirectory(mdSubDir, htmlLayout, subDirectoryStyles))
+        buildHtml(mdSubDir, htmlLayout, subDirectoryStyles, icon))
   })
 
   return htmlDirectory
@@ -92,7 +115,7 @@ function makeHtmlDirectory(mdDirectory, htmlLayout=null, cssStyles=[]) {
  * @param {Directory} directory 
  * @param {Directory} parentDirectory 
  */
-function link(directory, parentDirectory=null) {
+function linkMarkdown(directory, parentDirectory=null) {
   // Create link to directory index.md
   directory.files.forEach((file) => {
     if (file.name === 'index.md' || !file.name.endsWith('.md')) return
@@ -100,7 +123,7 @@ function link(directory, parentDirectory=null) {
   })
 
   // Get existing index.md
-  const indexFile = directory.getFile('index.md')
+  let indexFile = directory.getFile('index.md')
   const indexData = indexFile ? indexFile.data : ''
   directory.removeFile(indexFile)
   let indexMd = ''
@@ -134,11 +157,33 @@ function link(directory, parentDirectory=null) {
     })
   }
 
-  // Add index.md to directory
-  directory.files.push(new File('index.md', indexMd + indexData))
+  // Add index.md (back) to directory
+  if (indexFile) {
+    indexFile.data = indexMd + indexData
+  } else {
+    indexFile = new File('index.md', indexMd + indexData)
+    indexFile.metadata = {title: directory.name}
+  }
+  directory.files.push(indexFile)
   
   // Recursively link subdirectories
   directory.directories.forEach((subDirectory) => {
-    link(subDirectory, directory)
+    linkMarkdown(subDirectory, directory)
+  })
+}
+
+function readMetadata(directory) {
+  // Read metadata
+  directory.files.forEach((file) => {
+    if (file.name.endsWith('.md')) {
+      const result = metadataParser(file.data)
+      file.data = result.content
+      file.metadata = result.metadata
+    }
+  })
+  
+  // Recursively read metadata in subdirectories
+  directory.directories.forEach((subDirectory) => {
+    readMetadata(subDirectory)
   })
 }

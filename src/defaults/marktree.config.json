@@ -1,0 +1,12 @@
+{
+  "source": "markdown",
+  "dest": "docs",
+  "htmlLayout": "layout.html",
+  "exclude": [],
+  "cssStyles": "styles.css",
+  "icon": "favicon.ico",
+  "insertMarkdown": "<!-- insert:markdown -->",
+  "insertStyles": "<!-- insert:styles -->",
+  "insertTitle": "<!-- insert:title -->",
+  "insertIcon": "<!-- insert:icon -->"
+}

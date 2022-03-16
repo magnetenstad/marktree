@@ -1,5 +1,5 @@
 #!/usr/bin/env node
 
-import { readMarkdown, writeHtml } from '../src/index.js'
+import { buildMarktree } from './marktree.js'
 
-writeHtml(readMarkdown())
+buildMarktree()
