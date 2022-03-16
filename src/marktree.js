@@ -16,7 +16,7 @@ if (configFile) {
 }
 const md = new MarkdownIt();
 md.use(MarkdownInclude,
-    { includeRe: /\n#include(.+)/, bracesAreOptional: true })
+    { includeRe: /\n#include!(.+)/, bracesAreOptional: true })
 md.use(MarkdownKatex, { "throwOnError" : false, "errorColor" : " #cc0000" });
 md.use(MarkdownHighlight, { inline: true });
 

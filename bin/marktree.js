@@ -1,5 +1,5 @@
 #!/usr/bin/env node
 
-import { buildMarktree } from './marktree.js'
+import { buildMarktree } from '../src/marktree.js'
 
 buildMarktree()
