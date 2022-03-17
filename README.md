@@ -57,6 +57,8 @@ Configure marktree by adding a `marktree.config.json` config file. The following
   "source": "markdown",
   "dest": "docs",
   "htmlLayout": "layout.html",
+  "exclude": [],
+  "autoLink": true,
   "cssStyles": "styles.css",
   "icon": "favicon.ico",
   "insertMarkdown": "<!-- insert:markdown -->",

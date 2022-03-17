@@ -21,17 +21,25 @@ md.use(MarkdownKatex, { "throwOnError" : false, "errorColor" : " #cc0000" });
 md.use(MarkdownHighlight, { inline: true });
 
 function buildMarktree() {
-  console.log('Starting build...')
+    console.log('Starting build...')
+
   const mdDirectory = Directory.read(config.source, config.exclude);
-  console.log('[Read] ' + mdDirectory.toString());
+
+    console.log('[Read] ' + mdDirectory.toString());
+
   editMarkdown(mdDirectory)
-  console.log('Edited markdown')
+
+    console.log('Edited markdown')
+
   const htmlDirectory = buildHtml(mdDirectory)
   htmlDirectory.name = config.dest
-  console.log('Rendered html')
+
+    console.log('Rendered html')
+
   htmlDirectory.write()
-  console.log('[Write] ' + htmlDirectory.toString());
-  console.log('Successfully finished building!');
+
+    console.log('[Write] ' + htmlDirectory.toString());
+    console.log('Successfully finished building!');
 }
 
 function editMarkdown(directory) {
@@ -42,7 +50,9 @@ function editMarkdown(directory) {
     directory.files.push(new File(config.cssStyles, defaultCssStyles))
   }
   readMetadata(directory)
-  linkMarkdown(directory)
+  if (config.autoLink) {
+    linkMarkdown(directory)
+  }
 }
 
 /**
