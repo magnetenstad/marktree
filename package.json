@@ -1,6 +1,6 @@
 {
   "name": "marktree",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Grow a markdown tree",
   "main": "src/index.js",
   "type": "module",
@@ -29,7 +29,7 @@
     "markdown-it-highlightjs": "^3.6.0",
     "markdown-it-include": "^2.0.0",
     "markdown-yaml-metadata-parser": "^3.0.0",
-    "virtual-file-system": "^1.1.2"
+    "virtual-file-system": "^1.1.6"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"
