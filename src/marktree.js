@@ -133,7 +133,7 @@ function linkMarkdown(directory, parentDirectory=null) {
   })
 
   // Get existing index.md
-  let indexFile = directory.getFile(/\bindex.md\b/)
+  let indexFile = directory.getFile(/^index.md$/)
   const indexData = indexFile ? indexFile.data : ''
   directory.removeFile(indexFile)
   let indexMd = ''
