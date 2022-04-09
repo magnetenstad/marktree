@@ -4,6 +4,7 @@ export const defaultConfig = {
   "dest": "docs",
   "htmlLayout": "layout.html",
   "exclude": [],
+  "autoLink": true,
   "cssStyles": "styles.css",
   "icon": "favicon.ico",
   "insertMarkdown": "<!-- insert:markdown -->",
