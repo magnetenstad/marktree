@@ -21,25 +21,25 @@ md.use(MarkdownKatex, { "throwOnError" : false, "errorColor" : " #cc0000" });
 md.use(MarkdownHighlight, { inline: true });
 
 function buildMarktree() {
-    console.log('Starting build...')
+  console.log('Starting build...')
 
   const mdDirectory = Directory.read(config.source, config.exclude);
 
-    console.log('[Read] ' + mdDirectory.toString());
+  console.log('[Read] ' + mdDirectory.toString());
 
   editMarkdown(mdDirectory)
 
-    console.log('Edited markdown')
+  console.log('Edited markdown')
 
   const htmlDirectory = buildHtml(mdDirectory)
   htmlDirectory.name = config.dest
 
-    console.log('Rendered html')
+  console.log('Rendered html')
 
   htmlDirectory.write()
 
-    console.log('[Write] ' + htmlDirectory.toString());
-    console.log('Successfully finished building!');
+  console.log('[Write] ' + htmlDirectory.toString());
+  console.log('Successfully finished building!');
 }
 
 function editMarkdown(directory) {
@@ -60,6 +60,7 @@ function editMarkdown(directory) {
  * @param {Directory} mdDirectory 
  * @param {*} htmlLayout 
  * @param {*} cssStyles 
+ * @param {*} icon 
  * @returns 
  */
 function buildHtml(mdDirectory, htmlLayout=null, cssStyles=[], icon=null) {
@@ -85,7 +86,10 @@ function buildHtml(mdDirectory, htmlLayout=null, cssStyles=[], icon=null) {
     if (file.name.endsWith('.html')) return
     // Markdown files are converted to html
     if (file.name.endsWith('.md')) {
-      const htmlRender = md.render(file.data).replaceAll('.md', '.html')
+      const data = file.data.replaceAll('%20', '__SPACE__')
+      const htmlRender = md.render(data)
+          .replaceAll('.md', '.html')
+          .replaceAll('__SPACE__', ' ')
       let htmlStyles = ''
       cssStyles.forEach((style) => {
         htmlStyles += `<link rel="stylesheet" href="${style}">\n`
@@ -163,7 +167,7 @@ function linkMarkdown(directory, parentDirectory=null) {
         indexMd += `### Files\n`
         count++
       }
-      indexMd += `- [${file.name}](${file.name})\n`
+      indexMd += `- [${file.name}](${file.name.replaceAll(' ', '%20')})\n`
     })
   }
 
