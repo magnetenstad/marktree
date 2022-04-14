@@ -1,3 +1,4 @@
 {
-  "exclude": ["excludeme.md"]
+  "exclude": ["excludeme.md"],
+  "include": ["subfolder", "images"]
 }

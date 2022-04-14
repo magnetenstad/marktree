@@ -25,6 +25,17 @@ function buildMarktree() {
 
   const mdDirectory = Directory.read(config.source, config.exclude);
 
+  if (config.include) {
+    for (let dir of mdDirectory.directories) {
+      if (!config.include.includes(dir.name)) {
+        const index = mdDirectory.directories.indexOf(dir)
+        if (index > -1) {
+          mdDirectory.directories.splice(index, 1)
+        }
+      }
+    }
+  }
+
   console.log('[Read] ' + mdDirectory.toString());
 
   editMarkdown(mdDirectory)
@@ -92,7 +103,7 @@ function buildHtml(mdDirectory, htmlLayout=null, cssStyles=[], icon=null) {
           .replaceAll('__SPACE__', ' ')
       let htmlStyles = ''
       cssStyles.forEach((style) => {
-        htmlStyles += `<link rel="stylesheet" href="${style}">\n`
+        htmlStyles += `<link rel="stylesheet" href="${style}">\n  `
       })
       // Inserts
       const htmlData = htmlLayout

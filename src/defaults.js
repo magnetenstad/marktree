@@ -3,6 +3,7 @@ export const defaultConfig = {
   "source": "markdown",
   "dest": "docs",
   "htmlLayout": "layout.html",
+  "include": [],
   "exclude": [],
   "autoLink": true,
   "cssStyles": "styles.css",
@@ -15,26 +16,24 @@ export const defaultConfig = {
 
 export const defaultHtmlLayout = 
 `<!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
   <!-- Katex -->
   <link rel="stylesheet" href=
       "https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+
   <!-- GitHub Markdown Styles -->
   <link rel="stylesheet" href=
       "https://cdn.jsdelivr.net/github-markdown-css/2.2.1/github-markdown.css"/>
-  
+
   <title><!-- insert:title --></title>
   <link rel="icon" type="image/x-icon" href="<!-- insert:icon -->">
-  
-<!-- Custom Styles -->
-<!-- insert:styles -->
 
+  <!-- Custom Styles -->
+  <!-- insert:styles -->
 </head>
+
 <body>
 <article class="markdown-body">
 
@@ -42,6 +41,7 @@ export const defaultHtmlLayout =
 
 </article>
 </body>
+
 </html>
 `
 
