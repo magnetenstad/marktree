@@ -33,6 +33,7 @@
 <li><a href="file with spaces.html">file with spaces.html</a></li>
 <li><a href="fragment.html">fragment.html</a></li>
 <li><a href="github.html">github.html</a></li>
+<li><a href="html.html">html.html</a></li>
 </ul>
 <h1>marktree 🔖🌳</h1>
 <p>marktree is a static site generator, using markdown. It works with GitHub pages out of the box.</p>
@@ -48,8 +49,8 @@
 <li>Create a <code>markdown/</code>-folder and fill it with markdown files</li>
 <li>Add the build script to <code><span class="hljs-keyword">package</span>.json</code></li>
 </ol>
-<pre><code class="hljs language-diff">&quot;scripts&quot;: {
-<span class="hljs-addition">+  &quot;build&quot;: &quot;marktree&quot;</span>
+<pre><code class="hljs language-diff">"scripts": {
+<span class="hljs-addition">+  "build": "marktree"</span>
 },
 </code></pre>
 <ol start="4">
@@ -69,18 +70,18 @@
 <ol start="2">
 <li>Add the dev script to <code><span class="hljs-keyword">package</span>.json</code> and update <code><span class="hljs-selector-tag">main</span></code></li>
 </ol>
-<pre><code class="hljs language-diff"><span class="hljs-addition">+&quot;main&quot;: &quot;node_modules/marktree/src/index.js&quot;,</span>
-&quot;scripts&quot;: {
-<span class="hljs-addition">+  &quot;dev&quot;: &quot;nodemon marktree&quot;,</span>
-   &quot;build&quot;: &quot;marktree&quot;
+<pre><code class="hljs language-diff"><span class="hljs-addition">+"main": "node_modules/marktree/src/index.js",</span>
+"scripts": {
+<span class="hljs-addition">+  "dev": "nodemon marktree",</span>
+   "build": "marktree"
 },
 </code></pre>
 <ol start="3">
 <li>Add the <code>nodemon.json</code> config file</li>
 </ol>
 <pre><code class="hljs language-json"><span class="hljs-punctuation">{</span>
-  <span class="hljs-attr">&quot;watch&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;src/&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;markdown/&quot;</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
-  <span class="hljs-attr">&quot;ext&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;md, js&quot;</span>
+  <span class="hljs-attr">"watch"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">"src/"</span><span class="hljs-punctuation">,</span> <span class="hljs-string">"markdown/"</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">"ext"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"md, js"</span>
 <span class="hljs-punctuation">}</span>
 </code></pre>
 <ol start="4">
@@ -92,15 +93,15 @@
 <h3>Configure marktree</h3>
 <p>Configure marktree by adding a <code>marktree.config.json</code> config file. The following are default values.</p>
 <pre><code class="hljs language-json"><span class="hljs-punctuation">{</span>
-  <span class="hljs-attr">&quot;source&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;markdown&quot;</span><span class="hljs-punctuation">,</span>
-  <span class="hljs-attr">&quot;dest&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;docs&quot;</span><span class="hljs-punctuation">,</span>
-  <span class="hljs-attr">&quot;htmlLayout&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;layout.html&quot;</span><span class="hljs-punctuation">,</span>
-  <span class="hljs-attr">&quot;cssStyles&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;styles.css&quot;</span><span class="hljs-punctuation">,</span>
-  <span class="hljs-attr">&quot;icon&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;favicon.ico&quot;</span><span class="hljs-punctuation">,</span>
-  <span class="hljs-attr">&quot;insertMarkdown&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;&lt;!-- insert:markdown --&gt;&quot;</span><span class="hljs-punctuation">,</span>
-  <span class="hljs-attr">&quot;insertStyles&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;&lt;!-- insert:styles --&gt;&quot;</span><span class="hljs-punctuation">,</span>
-  <span class="hljs-attr">&quot;insertTitle&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;&lt;!-- insert:title --&gt;&quot;</span><span class="hljs-punctuation">,</span>
-  <span class="hljs-attr">&quot;insertIcon&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;&lt;!-- insert:icon --&gt;&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">"source"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"markdown"</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">"dest"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"docs"</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">"htmlLayout"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"layout.html"</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">"cssStyles"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"styles.css"</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">"icon"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"favicon.ico"</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">"insertMarkdown"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"&lt;!-- insert:markdown --&gt;"</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">"insertStyles"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"&lt;!-- insert:styles --&gt;"</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">"insertTitle"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"&lt;!-- insert:title --&gt;"</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">"insertIcon"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"&lt;!-- insert:icon --&gt;"</span><span class="hljs-punctuation">,</span>
 <span class="hljs-punctuation">}</span>
 </code></pre>
 <h3>Styling</h3>

@@ -98,9 +98,20 @@ function buildHtml(mdDirectory, htmlLayout=null, cssStyles=[], icon=null) {
     // Markdown files are converted to html
     if (file.name.endsWith('.md')) {
       const data = file.data.replaceAll('%20', '__SPACE__')
-      const htmlRender = md.render(data)
+      let htmlRender = md.render(data)
           .replaceAll('.md', '.html')
           .replaceAll('__SPACE__', ' ')
+          .replaceAll('&quot;', '"')
+      // TODO: Add all tags
+      for (let tag of ['div', 'p', 'a', 'span', 'iframe']) {
+        htmlRender = htmlRender
+            .replaceAll(`&gt;\n&lt;/${tag}&gt;`, `>\n</${tag}>`)
+            .replaceAll(`&gt;&lt;/${tag}&gt;`, `></${tag}>`)
+            .replaceAll(`&lt;${tag}&gt;`, `<${tag}>`)
+            .replaceAll(`&lt;/${tag}&gt;`, `</${tag}>`)
+            .replaceAll(`&lt;${tag}`, `<${tag}`)
+            // TODO: Catch more cases
+      }
       let htmlStyles = ''
       cssStyles.forEach((style) => {
         htmlStyles += `<link rel="stylesheet" href="${style}">\n  `
@@ -173,7 +184,8 @@ function linkMarkdown(directory, parentDirectory=null) {
   if (directory.files.length) {
     let count = 0
     directory.files.forEach((file) => {
-      if (file.name == config.htmlLayout || file.name == config.cssStyles) return
+      if (file.name == config.htmlLayout
+          || file.name == config.cssStyles) return
       if (!count) {
         indexMd += `### Files\n`
         count++
