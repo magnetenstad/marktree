@@ -185,13 +185,13 @@ function linkMarkdown(directory, parentDirectory = null) {
   directory.removeFile(indexFile);
   let indexMd = '';
 
-  // Create link to parent directory index.md
-  if (parentDirectory) {
-    indexMd += `↩️ [${parentDirectory.name}](../index.md)\n`;
-  }
-
   // Create header
-  indexMd += `\n### ${directory.name}\n\n`;
+  indexMd += '\n#### ';
+  if (parentDirectory) {
+    indexMd += `[${parentDirectory.name}/](../index.md)`;
+  }
+  indexMd += `[${directory.name}](./index.md)\n`;
+  indexMd += '\n';
 
   // Create links to subdirectories
   if (directory.directories.length) {
@@ -203,14 +203,22 @@ function linkMarkdown(directory, parentDirectory = null) {
   // Create links to files
   if (directory.files.length) {
     directory.files.forEach((file) => {
-      if (file.name == config.htmlLayout || file.name == config.cssStyles)
+      if (
+        file.name == config.htmlLayout ||
+        file.name == config.cssStyles ||
+        file.name == config.icon
+      )
         return;
       indexMd += `- 📄 [${file.name}](${file.name.replaceAll(' ', '%20')})\n`;
     });
   }
 
   // Add index.md (back) to directory
-  const totalData = mdLinksStart + indexMd + mdLinksEnd + indexData;
+  const totalData =
+    mdLinksStart +
+    indexMd.replace(directory.name, directory.name + ' ✨') +
+    mdLinksEnd +
+    indexData;
   if (indexFile) {
     indexFile.data = totalData;
   } else {
@@ -222,10 +230,12 @@ function linkMarkdown(directory, parentDirectory = null) {
   // Add links to files in the directory
   directory.files.forEach((file) => {
     if (file.name === 'index.md' || !file.name.endsWith('.md')) return;
+    if (!('\n' + file.data).includes('\n# ')) {
+      file.data = `\n# ${file.name}` + file.data;
+    }
     file.data =
       mdLinksStart +
-      `↩️ [${directory.name}](./index.md)\n` +
-      indexMd +
+      indexMd.replace(file.name, file.name + ' ✨') +
       mdLinksEnd +
       file.data;
   });

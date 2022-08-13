@@ -16,73 +16,69 @@ export const defaultConfig = {
 
 export const defaultHtmlLayout = `<!DOCTYPE html>
 <html>
+  <head>
+    <!-- Katex -->
+    <link rel="stylesheet" href=
+        "https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
 
-<head>
-  <!-- Katex -->
-  <link rel="stylesheet" href=
-      "https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+    <!-- GitHub Markdown Styles -->
+    <link rel="stylesheet" href=
+        "https://cdn.jsdelivr.net/github-markdown-css/2.2.1/github-markdown.css"/>
 
-  <!-- GitHub Markdown Styles -->
-  <link rel="stylesheet" href=
-      "https://cdn.jsdelivr.net/github-markdown-css/2.2.1/github-markdown.css"/>
+    <title><!-- insert:title --></title>
+    <link rel="icon" type="image/x-icon" href="<!-- insert:icon -->">
 
-  <title><!-- insert:title --></title>
-  <link rel="icon" type="image/x-icon" href="<!-- insert:icon -->">
+    <!-- Custom Styles -->
+    <!-- insert:styles -->
+  </head>
 
-  <!-- Custom Styles -->
-  <!-- insert:styles -->
-</head>
-
-<body class="markdown-body">
-  <div class="sticky">
-    <div class="absolute">
-      <!-- insert:links -->
-    </div>
-  </div>
-  <article>
-    <!-- insert:markdown -->
-  </article>
-</body>
-
+  <body class="markdown-body">
+    <div class="page flex-row">
+      <div class="links">
+        <!-- insert:links -->
+      </div>
+      <article class="content">
+        <!-- insert:markdown -->
+      </article>
+      </div>
+  </body>
 </html>
 `;
 
 export const defaultCssStyles = `
+
 body {
+  overflow: hidden;
   margin: 0;
-  padding: 0;
-  background-color: #f0f0f0;
 }
 
-.sticky {
-  position: sticky;
-  z-index: -1;
-  left: 0;
-  top: 0;
-  width: 0;
-  height: 0;
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  justify-content: center;
 }
 
-.absolute {
-  position: absolute;
-  padding: 1rem;
-  width: max-content;
-}
-
-article {
-  position: relative;
-  background-color: white;
-  box-sizing: border-box;
-  min-width: 200px;
-  max-width: 980px;
+.page {
   margin: 0 auto;
-  padding: 45px;
+  padding: 0;
 }
 
-@media (max-width: 767px) {
-  .markdown-body {
-    padding: 15px;
-  }
+.content {
+  padding: 1rem;
+  width: 980px;
+  max-height: 100vh;
+  overflow-y: auto;
+}
+
+.links {
+  padding: 1rem;
+}
+
+.links > ul {
+  list-style: none;
+  padding: 0 !important;
+  margin: 0;
 }
 
 pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5px}/*!
