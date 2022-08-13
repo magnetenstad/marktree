@@ -1,8 +1,10 @@
 import { File, Directory } from 'virtual-file-system';
-import MarkdownIt from 'markdown-it';
-import MarkdownKatex from '@iktakahiro/markdown-it-katex';
-import MarkdownHighlight from 'markdown-it-highlightjs';
-import MarkdownInclude from 'markdown-it-include';
+import markdownIt from 'markdown-it';
+import markdownItKatex from '@iktakahiro/markdown-it-katex';
+import markdownItHighlight from 'markdown-it-highlightjs';
+import markdownItInclude from 'markdown-it-include';
+import markdownItInlineComments from 'markdown-it-inline-comments';
+
 import {
   defaultConfig,
   defaultHtmlLayout,
@@ -17,13 +19,14 @@ const configFile = File.read('marktree.config.json');
 if (configFile) {
   Object.assign(config, JSON.parse(configFile.data));
 }
-const md = new MarkdownIt();
-md.use(MarkdownInclude, {
+const md = new markdownIt();
+md.use(markdownItInclude, {
   includeRe: /\n#include!(.+)/,
   bracesAreOptional: true,
 });
-md.use(MarkdownKatex, { throwOnError: false, errorColor: ' #cc0000' });
-md.use(MarkdownHighlight, { inline: true });
+md.use(markdownItKatex, { throwOnError: false, errorColor: ' #cc0000' });
+md.use(markdownItHighlight, { inline: true });
+md.use(markdownItInlineComments);
 
 function buildMarktree() {
   console.log('Starting build...');
@@ -71,6 +74,28 @@ function editMarkdown(directory) {
   }
 }
 
+function renderHtml(markdown) {
+  const data = markdown.replaceAll('%20', '__SPACE__');
+  let htmlRender = md
+    .render(data)
+    .replaceAll('.md', '.html')
+    .replaceAll('__SPACE__', ' ')
+    .replaceAll('&quot;', '"');
+  // TODO: Add all tags
+  for (let tag of ['div', 'p', 'a', 'span', 'iframe']) {
+    htmlRender = htmlRender
+      .replaceAll(`&gt;\n&lt;/${tag}&gt;`, `>\n</${tag}>`)
+      .replaceAll(`&gt;&lt;/${tag}&gt;`, `></${tag}>`)
+      .replaceAll(`&lt;${tag}&gt;`, `<${tag}>`)
+      .replaceAll(`&lt;/${tag}&gt;`, `</${tag}>`)
+      .replaceAll(`&lt;${tag}`, `<${tag}`);
+    // TODO: Catch more cases
+  }
+  return htmlRender;
+}
+
+const mdLinksStart = '<!-- md:links:start -->';
+const mdLinksEnd = '<!-- md:links:end -->';
 /**
  *
  * @param {Directory} mdDirectory
@@ -107,22 +132,10 @@ function buildHtml(
     if (file.name.endsWith('.html')) return;
     // Markdown files are converted to html
     if (file.name.endsWith('.md')) {
-      const data = file.data.replaceAll('%20', '__SPACE__');
-      let htmlRender = md
-        .render(data)
-        .replaceAll('.md', '.html')
-        .replaceAll('__SPACE__', ' ')
-        .replaceAll('&quot;', '"');
-      // TODO: Add all tags
-      for (let tag of ['div', 'p', 'a', 'span', 'iframe']) {
-        htmlRender = htmlRender
-          .replaceAll(`&gt;\n&lt;/${tag}&gt;`, `>\n</${tag}>`)
-          .replaceAll(`&gt;&lt;/${tag}&gt;`, `></${tag}>`)
-          .replaceAll(`&lt;${tag}&gt;`, `<${tag}>`)
-          .replaceAll(`&lt;/${tag}&gt;`, `</${tag}>`)
-          .replaceAll(`&lt;${tag}`, `<${tag}`);
-        // TODO: Catch more cases
-      }
+      const linksStart = file.data.indexOf(mdLinksStart);
+      const linkEnd = file.data.indexOf(mdLinksEnd) + mdLinksEnd.length;
+      const mdLinks = file.data.substring(linksStart, linkEnd);
+      const htmlRender = renderHtml(file.data.substring(linkEnd));
       let htmlStyles = '';
       cssStyles.forEach((style) => {
         htmlStyles += `<link rel="stylesheet" href="${style}">\n  `;
@@ -135,7 +148,8 @@ function buildHtml(
           config.insertTitle,
           file.metadata.title ? file.metadata.title : file.name
         )
-        .replaceAll(config.insertIcon, icon);
+        .replaceAll(config.insertIcon, icon)
+        .replaceAll(config.insertLinks, renderHtml(mdLinks));
       const htmlFile = new File(file.name.replaceAll('.md', '.html'), htmlData);
       htmlFile.metadata = file.metadata;
       htmlDirectory.files.push(htmlFile);
@@ -165,12 +179,6 @@ function buildHtml(
  * @param {Directory} parentDirectory
  */
 function linkMarkdown(directory, parentDirectory = null) {
-  // Create link to directory index.md
-  directory.files.forEach((file) => {
-    if (file.name === 'index.md' || !file.name.endsWith('.md')) return;
-    file.data = `↩️ [${directory.name}](./index.md)\n` + file.data;
-  });
-
   // Get existing index.md
   let indexFile = directory.getFile(/^index.md$/);
   const indexData = indexFile ? indexFile.data : '';
@@ -183,38 +191,44 @@ function linkMarkdown(directory, parentDirectory = null) {
   }
 
   // Create header
-  indexMd += `\n# ${directory.name}\n\n`;
+  indexMd += `\n### ${directory.name}\n\n`;
 
   // Create links to subdirectories
   if (directory.directories.length) {
-    indexMd += `### Directories\n`;
     directory.directories.forEach((directory) => {
-      indexMd += `- [${directory.name}](./${directory.name}/index.md)\n`;
+      indexMd += `- 📂 [${directory.name}](./${directory.name}/index.md)\n`;
     });
   }
 
   // Create links to files
   if (directory.files.length) {
-    let count = 0;
     directory.files.forEach((file) => {
       if (file.name == config.htmlLayout || file.name == config.cssStyles)
         return;
-      if (!count) {
-        indexMd += `### Files\n`;
-        count++;
-      }
-      indexMd += `- [${file.name}](${file.name.replaceAll(' ', '%20')})\n`;
+      indexMd += `- 📄 [${file.name}](${file.name.replaceAll(' ', '%20')})\n`;
     });
   }
 
   // Add index.md (back) to directory
+  const totalData = mdLinksStart + indexMd + mdLinksEnd + indexData;
   if (indexFile) {
-    indexFile.data = indexMd + indexData;
+    indexFile.data = totalData;
   } else {
-    indexFile = new File('index.md', indexMd + indexData);
+    indexFile = new File('index.md', totalData);
     indexFile.metadata = { title: directory.name };
   }
   directory.files.push(indexFile);
+
+  // Add links to files in the directory
+  directory.files.forEach((file) => {
+    if (file.name === 'index.md' || !file.name.endsWith('.md')) return;
+    file.data =
+      mdLinksStart +
+      `↩️ [${directory.name}](./index.md)\n` +
+      indexMd +
+      mdLinksEnd +
+      file.data;
+  });
 
   // Recursively link subdirectories
   directory.directories.forEach((subDirectory) => {

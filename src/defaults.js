@@ -1,21 +1,20 @@
-
 export const defaultConfig = {
-  "source": "markdown",
-  "dest": "docs",
-  "htmlLayout": "layout.html",
-  "include": [],
-  "exclude": [],
-  "autoLink": true,
-  "cssStyles": "styles.css",
-  "icon": "favicon.ico",
-  "insertMarkdown": "<!-- insert:markdown -->",
-  "insertStyles": "<!-- insert:styles -->",
-  "insertTitle": "<!-- insert:title -->",
-  "insertIcon": "<!-- insert:icon -->"
-}
+  source: 'markdown',
+  dest: 'docs',
+  htmlLayout: 'layout.html',
+  include: [],
+  exclude: [],
+  autoLink: true,
+  cssStyles: 'styles.css',
+  icon: 'favicon.ico',
+  insertMarkdown: '<!-- insert:markdown -->',
+  insertStyles: '<!-- insert:styles -->',
+  insertTitle: '<!-- insert:title -->',
+  insertIcon: '<!-- insert:icon -->',
+  insertLinks: '<!-- insert:links -->',
+};
 
-export const defaultHtmlLayout = 
-`<!DOCTYPE html>
+export const defaultHtmlLayout = `<!DOCTYPE html>
 <html>
 
 <head>
@@ -34,19 +33,45 @@ export const defaultHtmlLayout =
   <!-- insert:styles -->
 </head>
 
-<body>
-<article class="markdown-body">
-
-<!-- insert:markdown -->
-
-</article>
+<body class="markdown-body">
+  <div class="sticky">
+    <div class="absolute">
+      <!-- insert:links -->
+    </div>
+  </div>
+  <article>
+    <!-- insert:markdown -->
+  </article>
 </body>
 
 </html>
-`
+`;
 
-export const defaultCssStyles =
-`.markdown-body {
+export const defaultCssStyles = `
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #f0f0f0;
+}
+
+.sticky {
+  position: sticky;
+  z-index: -1;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+}
+
+.absolute {
+  position: absolute;
+  padding: 1rem;
+  width: max-content;
+}
+
+article {
+  position: relative;
+  background-color: white;
   box-sizing: border-box;
   min-width: 200px;
   max-width: 980px;
@@ -70,4 +95,4 @@ pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5p
   Outdated base version: https://github.com/primer/github-syntax-light
   Current colors taken from GitHub's CSS
 */.hljs{color:#24292e;background:#fff}.hljs-doctag,.hljs-keyword,.hljs-meta .hljs-keyword,.hljs-template-tag,.hljs-template-variable,.hljs-type,.hljs-variable.language_{color:#d73a49}.hljs-title,.hljs-title.class_,.hljs-title.class_.inherited__,.hljs-title.function_{color:#6f42c1}.hljs-attr,.hljs-attribute,.hljs-literal,.hljs-meta,.hljs-number,.hljs-operator,.hljs-selector-attr,.hljs-selector-class,.hljs-selector-id,.hljs-variable{color:#005cc5}.hljs-meta .hljs-string,.hljs-regexp,.hljs-string{color:#032f62}.hljs-built_in,.hljs-symbol{color:#e36209}.hljs-code,.hljs-comment,.hljs-formula{color:#6a737d}.hljs-name,.hljs-quote,.hljs-selector-pseudo,.hljs-selector-tag{color:#22863a}.hljs-subst{color:#24292e}.hljs-section{color:#005cc5;font-weight:700}.hljs-bullet{color:#735c0f}.hljs-emphasis{color:#24292e;font-style:italic}.hljs-strong{color:#24292e;font-weight:700}.hljs-addition{color:#22863a;background-color:#f0fff4}.hljs-deletion{color:#b31d28;background-color:#ffeef0}
-`
+`;
