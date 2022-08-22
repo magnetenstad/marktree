@@ -1,11 +1,12 @@
 {
   "name": "marktree",
-  "version": "1.2.0",
+  "version": "1.2.2",
   "description": "Grow a markdown tree",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
-    "lib/**/*"
+    "lib/**/*",
+    "bin/**/*"
   ],
   "type": "module",
   "bin": {
