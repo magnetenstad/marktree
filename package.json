@@ -2,14 +2,18 @@
   "name": "marktree",
   "version": "1.1.5",
   "description": "Grow a markdown tree",
-  "main": "src/index.js",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib/**/*"
+  ],
   "type": "module",
   "bin": {
     "marktree": "bin/marktree.js"
   },
   "scripts": {
-    "dev": "nodemon src/index.js",
-    "build": "node src/index.js"
+    "dev": "tsc && nodemon lib/index.js",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
@@ -30,7 +34,7 @@
     "markdown-it-include": "^2.0.0",
     "markdown-it-inline-comments": "^1.0.1",
     "markdown-yaml-metadata-parser": "^3.0.0",
-    "virtual-file-system": "^1.1.6"
+    "virtual-file-system": "^1.2.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"

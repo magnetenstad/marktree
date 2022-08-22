@@ -1,4 +1,20 @@
-export const defaultConfig = {
+export type MarktreeConfig = {
+  source: string;
+  dest: string;
+  htmlLayout: string;
+  include: string[];
+  exclude: string[];
+  autoLink: boolean;
+  cssStyles: string;
+  icon: string;
+  insertMarkdown: string;
+  insertStyles: string;
+  insertTitle: string;
+  insertIcon: string;
+  insertLinks: string;
+};
+
+export const defaultConfig: MarktreeConfig = {
   source: 'markdown',
   dest: 'docs',
   htmlLayout: 'layout.html',

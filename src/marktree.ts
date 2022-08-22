@@ -1,8 +1,13 @@
 import { File, Directory } from 'virtual-file-system';
+//@ts-ignore
 import markdownIt from 'markdown-it';
+//@ts-ignore
 import markdownItKatex from '@iktakahiro/markdown-it-katex';
+//@ts-ignore
 import markdownItHighlight from 'markdown-it-highlightjs';
+//@ts-ignore
 import markdownItInclude from 'markdown-it-include';
+//@ts-ignore
 import markdownItInlineComments from 'markdown-it-inline-comments';
 
 import {
@@ -10,6 +15,7 @@ import {
   defaultHtmlLayout,
   defaultCssStyles,
 } from './defaults.js';
+//@ts-ignore
 import metadataParser from 'markdown-yaml-metadata-parser';
 
 export { buildMarktree };
@@ -32,6 +38,8 @@ function buildMarktree() {
   console.log('Starting build...');
 
   const mdDirectory = Directory.read(config.source, config.exclude);
+
+  if (mdDirectory == null) return;
 
   if (config.include && config.include.length) {
     for (let dir of mdDirectory.directories) {
@@ -61,7 +69,7 @@ function buildMarktree() {
   console.log('Successfully finished building!');
 }
 
-function editMarkdown(directory) {
+function editMarkdown(directory: Directory) {
   if (!directory.getFile(config.htmlLayout)) {
     directory.files.push(new File(config.htmlLayout, defaultHtmlLayout));
   }
@@ -74,7 +82,7 @@ function editMarkdown(directory) {
   }
 }
 
-function renderHtml(markdown) {
+function renderHtml(markdown: string) {
   const data = markdown.replaceAll('%20', '__SPACE__');
   let htmlRender = md
     .render(data)
@@ -105,10 +113,10 @@ const mdLinksEnd = '<!-- md:links:end -->';
  * @returns
  */
 function buildHtml(
-  mdDirectory,
-  htmlLayout = null,
-  cssStyles = [],
-  icon = null
+  mdDirectory: Directory,
+  htmlLayout: string = '',
+  cssStyles: string[] = [],
+  icon: string = ''
 ) {
   // Create a new directory
   const htmlDirectory = new Directory(mdDirectory.name);
@@ -118,7 +126,9 @@ function buildHtml(
   if (newLayout) {
     htmlLayout = newLayout.data;
   }
-  const newStyles = mdDirectory.getFile(config.cssStyles);
+  if (htmlLayout.length == 0) throw new Error('Invalid htmlLayout!');
+
+  const newStyles = mdDirectory.getFile(config.cssStyles)?.name;
   if (newStyles) {
     cssStyles = [...cssStyles, newStyles];
   }
@@ -159,7 +169,7 @@ function buildHtml(
   });
 
   // Recursively create html subdirectories
-  const subDirectoryStyles = [];
+  const subDirectoryStyles: string[] = [];
   cssStyles.forEach((style) => {
     subDirectoryStyles.push('../' + style);
   });
@@ -178,11 +188,14 @@ function buildHtml(
  * @param {Directory} directory
  * @param {Directory} parentDirectory
  */
-function linkMarkdown(directory, parentDirectory = null) {
+function linkMarkdown(
+  directory: Directory,
+  parentDirectory: Directory | null = null
+) {
   // Get existing index.md
   let indexFile = directory.getFile(/^index.md$/);
   const indexData = indexFile ? indexFile.data : '';
-  directory.removeFile(indexFile);
+  if (indexFile) directory.removeFile(indexFile);
   let indexMd = '';
 
   // Create header
@@ -231,7 +244,7 @@ function linkMarkdown(directory, parentDirectory = null) {
   directory.files.forEach((file) => {
     if (file.name === 'index.md' || !file.name.endsWith('.md')) return;
     if (!('\n' + file.data).includes('\n# ')) {
-      file.data = `\n# ${file.name}` + file.data;
+      file.data = `\n# ${file.name}\n` + file.data;
     }
     file.data =
       mdLinksStart +
@@ -246,7 +259,7 @@ function linkMarkdown(directory, parentDirectory = null) {
   });
 }
 
-function readMetadata(directory) {
+function readMetadata(directory: Directory) {
   // Read metadata
   directory.files.forEach((file) => {
     if (file.name.endsWith('.md')) {
