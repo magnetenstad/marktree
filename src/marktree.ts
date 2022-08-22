@@ -222,7 +222,9 @@ function linkMarkdown(
         file.name == config.icon
       )
         return;
-      indexMd += `- 📄 [${file.name}](${file.name.replaceAll(' ', '%20')})\n`;
+      indexMd += `- 📄 [${file.name}](${file
+        .getNameWithoutExtension()
+        .replaceAll(' ', '%20')})\n`;
     });
   }
 
