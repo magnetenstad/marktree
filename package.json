@@ -14,7 +14,7 @@
   },
   "scripts": {
     "dev": "tsc && nodemon lib/index.js",
-    "build": "tsc"
+    "build": "tsc && marktree"
   },
   "repository": {
     "type": "git",
