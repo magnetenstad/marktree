@@ -222,16 +222,17 @@ function linkMarkdown(
         file.name == config.icon
       )
         return;
-      indexMd += `- 📄 [${file.name}](${file
-        .getNameWithoutExtension()
-        .replaceAll(' ', '%20')})\n`;
+      indexMd += `- 📄 [${file.getNameWithoutExtension()}](${file.name.replaceAll(
+        ' ',
+        '%20'
+      )})\n`;
     });
   }
 
   // Add index.md (back) to directory
   const totalData =
     mdLinksStart +
-    indexMd.replace(directory.name, directory.name + ' ✨') +
+    indexMd.replace(`[${directory.name}]`, `[${directory.name} ✨]`) +
     mdLinksEnd +
     indexData;
   if (indexFile) {
@@ -250,7 +251,7 @@ function linkMarkdown(
     }
     file.data =
       mdLinksStart +
-      indexMd.replace(file.name, file.name + ' ✨') +
+      indexMd.replace(`[${file.name}]`, `[${file.name} ✨]`) +
       mdLinksEnd +
       file.data;
   });
