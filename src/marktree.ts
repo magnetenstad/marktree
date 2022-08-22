@@ -247,11 +247,14 @@ function linkMarkdown(
   directory.files.forEach((file) => {
     if (file.name === 'index.md' || !file.name.endsWith('.md')) return;
     if (!('\n' + file.data).includes('\n# ')) {
-      file.data = `\n# ${file.name}\n` + file.data;
+      file.data = `\n# ${file.getNameWithoutExtension()}\n\n` + file.data;
     }
     file.data =
       mdLinksStart +
-      indexMd.replace(`[${file.name}]`, `[${file.name} ✨]`) +
+      indexMd.replace(
+        `[${file.getNameWithoutExtension()}]`,
+        `[${file.getNameWithoutExtension()} ✨]`
+      ) +
       mdLinksEnd +
       file.data;
   });
