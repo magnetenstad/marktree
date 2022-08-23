@@ -9,6 +9,8 @@ import markdownItHighlight from 'markdown-it-highlightjs';
 import markdownItInclude from 'markdown-it-include';
 //@ts-ignore
 import markdownItInlineComments from 'markdown-it-inline-comments';
+//@ts-ignore
+import markdownItAnchor from 'markdown-it-anchor';
 
 import {
   defaultConfig,
@@ -33,6 +35,7 @@ md.use(markdownItInclude, {
 md.use(markdownItKatex, { throwOnError: false, errorColor: ' #cc0000' });
 md.use(markdownItHighlight, { inline: true });
 md.use(markdownItInlineComments);
+md.use(markdownItAnchor);
 
 function buildMarktree() {
   console.log('Starting build...');
