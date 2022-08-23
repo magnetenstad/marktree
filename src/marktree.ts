@@ -1,5 +1,4 @@
 import { File, Directory } from 'virtual-file-system';
-//@ts-ignore
 import markdownIt from 'markdown-it';
 //@ts-ignore
 import markdownItKatex from '@iktakahiro/markdown-it-katex';
@@ -9,8 +8,8 @@ import markdownItHighlight from 'markdown-it-highlightjs';
 import markdownItInclude from 'markdown-it-include';
 //@ts-ignore
 import markdownItInlineComments from 'markdown-it-inline-comments';
-//@ts-ignore
 import markdownItAnchor from 'markdown-it-anchor';
+import markdownItTocDoneRight from 'markdown-it-toc-done-right';
 
 import {
   defaultConfig,
@@ -34,8 +33,9 @@ md.use(markdownItInclude, {
 });
 md.use(markdownItKatex, { throwOnError: false, errorColor: ' #cc0000' });
 md.use(markdownItHighlight, { inline: true });
-md.use(markdownItInlineComments);
+md.use(markdownItTocDoneRight);
 md.use(markdownItAnchor);
+md.use(markdownItInlineComments);
 
 function buildMarktree() {
   console.log('Starting build...');
@@ -44,6 +44,7 @@ function buildMarktree() {
 
   if (mdDirectory == null) return;
 
+  // TODO: Improve inclusion
   if (config.include && config.include.length) {
     for (let dir of mdDirectory.directories) {
       if (!config.include.includes(dir.name)) {
@@ -86,14 +87,14 @@ function editMarkdown(directory: Directory) {
 }
 
 function renderHtml(markdown: string) {
-  const data = markdown.replaceAll('%20', '__SPACE__');
+  const data = markdown.replaceAll('%20', '___SPACE___');
   let htmlRender = md
     .render(data)
-    .replaceAll('.md', '.html')
-    .replaceAll('__SPACE__', ' ')
+    .replaceAll('.md', '.html') // TODO: don't replace all .md
+    .replaceAll('___SPACE___', ' ')
     .replaceAll('&quot;', '"');
   // TODO: Add all tags
-  for (let tag of ['div', 'p', 'a', 'span', 'iframe']) {
+  for (let tag of ['div', 'p', 'a', 'span', 'iframe', 'h4']) {
     htmlRender = htmlRender
       .replaceAll(`&gt;\n&lt;/${tag}&gt;`, `>\n</${tag}>`)
       .replaceAll(`&gt;&lt;/${tag}&gt;`, `></${tag}>`)
@@ -105,8 +106,8 @@ function renderHtml(markdown: string) {
   return htmlRender;
 }
 
-const mdLinksStart = '<!-- md:links:start -->';
-const mdLinksEnd = '<!-- md:links:end -->';
+const mdLinksStart = '\n\n%md:links:start%\n\n';
+const mdLinksEnd = '\n\n%md:links:end%\n\n';
 /**
  *
  * @param {Directory} mdDirectory
@@ -145,24 +146,34 @@ function buildHtml(
     if (file.name.endsWith('.html')) return;
     // Markdown files are converted to html
     if (file.name.endsWith('.md')) {
-      const linksStart = file.data.indexOf(mdLinksStart);
-      const linkEnd = file.data.indexOf(mdLinksEnd) + mdLinksEnd.length;
-      const mdLinks = file.data.substring(linksStart, linkEnd);
-      const htmlRender = renderHtml(file.data.substring(linkEnd));
+      const htmlLinksStart = `<p>${mdLinksStart.trim()}</p>`;
+      const htmlLinksEnd = `<p>${mdLinksEnd.trim()}</p>`;
+      const htmlRender = renderHtml(file.data);
+      const linksStart = htmlRender.indexOf(htmlLinksStart);
+      const linksEnd = htmlRender.indexOf(htmlLinksEnd) + htmlLinksEnd.length;
+      const htmlLinks =
+        linksStart > -1 && linksEnd > -1
+          ? htmlRender.substring(
+              linksStart + htmlLinksStart.length,
+              linksEnd - htmlLinksEnd.length
+            )
+          : '';
+      const htmlContent = htmlRender.substring(linksEnd);
+
       let htmlStyles = '';
       cssStyles.forEach((style) => {
         htmlStyles += `<link rel="stylesheet" href="${style}">\n  `;
       });
       // Inserts
       const htmlData = htmlLayout
-        .replaceAll(config.insertMarkdown, htmlRender)
+        .replaceAll(config.insertMarkdown, htmlContent)
         .replaceAll(config.insertStyles, htmlStyles)
         .replaceAll(
           config.insertTitle,
           file.metadata.title ? file.metadata.title : file.name
         )
         .replaceAll(config.insertIcon, icon)
-        .replaceAll(config.insertLinks, renderHtml(mdLinks));
+        .replaceAll(config.insertLinks, htmlLinks);
       const htmlFile = new File(file.name.replaceAll('.md', '.html'), htmlData);
       htmlFile.metadata = file.metadata;
       htmlDirectory.files.push(htmlFile);
@@ -202,12 +213,12 @@ function linkMarkdown(
   let indexMd = '';
 
   // Create header
-  indexMd += '\n#### ';
+  indexMd += '\n<h4>';
   if (parentDirectory) {
     indexMd += `[${parentDirectory.name}/](../index.md)`;
   }
   indexMd += `[${directory.name}](./index.md)\n`;
-  indexMd += '\n';
+  indexMd += '</h4>\n';
 
   // Create links to subdirectories
   if (directory.directories.length) {
@@ -236,6 +247,7 @@ function linkMarkdown(
   const totalData =
     mdLinksStart +
     indexMd.replace(`[${directory.name}]`, `[${directory.name} ✨]`) +
+    '\n<h4>Table of Contents</h4>\n${toc}\n' +
     mdLinksEnd +
     indexData;
   if (indexFile) {
@@ -258,6 +270,7 @@ function linkMarkdown(
         `[${file.getNameWithoutExtension()}]`,
         `[${file.getNameWithoutExtension()} ✨]`
       ) +
+      '\n<h4>Table of Contents</h4>\n${toc}\n' +
       mdLinksEnd +
       file.data;
   });
