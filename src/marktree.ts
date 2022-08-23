@@ -223,7 +223,10 @@ function linkMarkdown(
   // Create links to subdirectories
   if (directory.directories.length) {
     directory.directories.forEach((directory) => {
-      indexMd += `- 📂 [${directory.name}](./${directory.name}/index.md)\n`;
+      indexMd += `- 📂 [${directory.name}](./${directory.name.replaceAll(
+        ' ',
+        '%20'
+      )}/index.md)\n`;
     });
   }
 
