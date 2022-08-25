@@ -129,7 +129,11 @@ function buildHtml(
 
   // Copy files to new directory
   mdDirectory.files.forEach((file) => {
-    if (file.name.endsWith('.html')) return;
+    // HTML files are pushed directly
+    if (file.name.endsWith('.html')) {
+      htmlDirectory.files.push(file);
+      return;
+    }
     // Markdown files are converted to html
     if (file.name.endsWith('.md')) {
       const linksStart = file.data.indexOf(mdLinksStart);
