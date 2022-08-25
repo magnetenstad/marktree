@@ -18,20 +18,29 @@ body {
 }
 
 .content {
-  padding: 1rem;
-  width: 980px;
-  max-height: 100vh;
-  overflow-y: auto;
+  width: 980px !important;
 }
 
-.links {
+.col {
+  width: 320px;
   padding: 1rem;
+  max-height: 100vh;
+  overflow-y: auto;
 }
 
 .links > ul {
   list-style: none;
   padding: 0 !important;
   margin: 0;
+}
+
+.h4 {
+  display: block;
+  margin-top: 1.33em;
+  margin-bottom: 1.33em;
+  margin-left: 0;
+  margin-right: 0;
+  font-weight: bold;
 }
 
 pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5px}/*!

@@ -1,4 +1,20 @@
-export const defaultConfig = {
+export type MarktreeConfig = {
+  source: string;
+  dest: string;
+  htmlLayout: string;
+  include: string[];
+  exclude: string[];
+  autoLink: boolean;
+  cssStyles: string;
+  icon: string;
+  insertMarkdown: string;
+  insertStyles: string;
+  insertTitle: string;
+  insertIcon: string;
+  insertLinks: string;
+};
+
+export const defaultConfig: MarktreeConfig = {
   source: 'markdown',
   dest: 'docs',
   htmlLayout: 'layout.html',
@@ -19,14 +35,14 @@ export const defaultHtmlLayout = `<!DOCTYPE html>
   <head>
     <!-- Katex -->
     <link rel="stylesheet" href=
-        "https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+        "https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css"/>
 
     <!-- GitHub Markdown Styles -->
     <link rel="stylesheet" href=
         "https://cdn.jsdelivr.net/github-markdown-css/2.2.1/github-markdown.css"/>
 
     <title><!-- insert:title --></title>
-    <link rel="icon" type="image/x-icon" href="<!-- insert:icon -->">
+    <link rel="icon" type="image/x-icon" href="<!-- insert:icon -->"/>
 
     <!-- Custom Styles -->
     <!-- insert:styles -->
@@ -34,10 +50,10 @@ export const defaultHtmlLayout = `<!DOCTYPE html>
 
   <body class="markdown-body">
     <div class="page flex-row">
-      <div class="links">
+      <div class="col">
         <!-- insert:links -->
       </div>
-      <article class="content">
+      <article class="col content">
         <!-- insert:markdown -->
       </article>
       </div>
@@ -65,20 +81,29 @@ body {
 }
 
 .content {
-  padding: 1rem;
-  width: 980px;
-  max-height: 100vh;
-  overflow-y: auto;
+  width: 980px !important;
 }
 
-.links {
+.col {
+  width: 320px;
   padding: 1rem;
+  max-height: 100vh;
+  overflow-y: auto;
 }
 
 .links > ul {
   list-style: none;
   padding: 0 !important;
   margin: 0;
+}
+
+.h4 {
+  display: block;
+  margin-top: 1.33em;
+  margin-bottom: 1.33em;
+  margin-left: 0;
+  margin-right: 0;
+  font-weight: bold;
 }
 
 pre code.hljs{display:block;overflow-x:auto;padding:1em}code.hljs{padding:3px 5px}/*!
