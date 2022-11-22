@@ -112,20 +112,19 @@ body {
   padding: 0;
 }
 
-/* table-of-contents */
-
-.table-of-contents > ol {
+.links .table-of-contents > ol {
   padding: 0;
+}
+
+.links li {
+  display: block;
+  white-space: nowrap;
 }
 
 article {
   scroll-behavior: smooth;
 }
 
-li {
-  display: block;
-  white-space: nowrap;
-}
 
 /*!
   Theme: GitHub
