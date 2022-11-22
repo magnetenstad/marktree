@@ -101,7 +101,7 @@ function renderHtml(markdown: string) {
       .replaceAll(`&lt;${tag}&gt;`, `<${tag}>`)
       .replaceAll(`&lt;/${tag}&gt;`, `</${tag}>`)
       .replaceAll(`&lt;${tag}`, `<${tag}`);
-    // TODO: Catch more cases
+    // TODO: Catch more cases, use regex.
   }
   return htmlRender;
 }
