@@ -4,10 +4,6 @@ marktree is a static site generator, using markdown. It works with GitHub pages 
 
 ## Get started
 
-[create-marktree](https://github.com/magnetenstad/create-marktree) is the quickest way to start a marktree project.
-
-### Doing it manually
-
 1. Install marktree
 
 ```sh
