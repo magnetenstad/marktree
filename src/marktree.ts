@@ -263,7 +263,9 @@ function linkMarkdown(
     indexFile = new File('index.md', totalData);
     indexFile.metadata = { title: directory.name };
   }
-  directory.files.push(indexFile);
+  if (!directory.getFile('index.html')) {
+    directory.files.push(indexFile);
+  }
 
   // Add links to files in the directory
   directory.files.forEach((file) => {
